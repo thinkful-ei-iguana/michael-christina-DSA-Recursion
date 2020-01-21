@@ -48,15 +48,12 @@ console.log('Nth Triangle: ', nthTriangle(3));
 
 // 5 String Splitter
 const stringSplitter = function(string, splitter) {
+  let splitAt = string.indexOf(splitter);
   //Base Case
-  // if(string === ''){
-  //   return '';
-  // }
-  // let splitAt; 
-  // if(string.indexOf(splitter) > string.length){
-  //   return splitAt = string.length;
-  // } else splitAt = string.indexOf(splitter);
-  // return [string.slice(0,splitAt-1), ...stringSplitter(string.substr(splitAt+1), splitter)];
+  if(splitAt === -1){
+    return [string];
+  }
+  return [string.slice(0,splitAt), ...stringSplitter(string.substr(splitAt+1), splitter)];
 };
 
 console.log('String Splitter: ', stringSplitter('02/20/2020', '/'));
@@ -86,12 +83,18 @@ const factorial = function(n){
 console.log('Factorial: ', factorial(4));
 
 // 8 Find a way out of the maze
-
+const maze = function(array);
 // 9 Find ALL the ways out of the maze
 
 // 10 Anagrams
-
+  //length of word factorial is number of solutions.
+  
 // 11 Organization Chart
 
 // 12 Binary Representation
+const binary = function(n){
+  //Base case
+  // if()
+};
 
+console.log('Binary: ', binary(25346));
