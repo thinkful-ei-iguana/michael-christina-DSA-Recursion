@@ -61,15 +61,17 @@ console.log('String Splitter: ', stringSplitter('02/20/2020', '/'));
 // 6 Fibonacci
 const fibonacci = function(n, seed=0){
   //Base Case
+  seed = seed || {};
   if (seed[n]){
     return seed[n];
   }
   if(n <= 2){
     return 1;
   }
-  return seed[n] = fibonacci(n-1, seed) + fibonacci(n-2, seed);
+  seed[n] = fibonacci(n-1, seed) + fibonacci(n-2, seed);
+  return seed[n];
 };
-console.log('Fibonacci: ', fibonacci(7));
+console.log('Fibonacci: ', fibonacci(35));
 
 // 7 Factorial
 const factorial = function(n){
@@ -86,63 +88,73 @@ console.log('Factorial: ', factorial(4));
 let mazePath = '';
 
 const validPath = function(array, x, y, maxX, maxY){
-  if (x < 0 || x > maxX || y < 0 || y > maxY) {
+  if (x < 0 || x > maxX-1 || y < 0 || y > maxY-1) {
     return false;
-  } else if (array[x][y] === '*') {
+  } else if (array[y][x] === '*') {
     return false;
   } else return true;
 };
 
 const up = function(y){
-  return y-1;
+  y = y-1;
+  return y;
 };
 const down = function(y){
-  return y+1;
+  y = y+1;
+  return y;
 };
 const right = function(x){
-  return x+1;
+  x = x+1;
+  return x;
 };
 const left = function(x){
-  return x-1;
+  x = x-1;
+  return x;
 };
 
 const testMaze = [
-  [' ',' ', ' '],
-  [' ','*', ' '],
-  [' ',' ', 'e']
+  [' ', ' ', '*', '*', ' '],
+  [' ', '*', '*', '*', ' '],
+  [' ', ' ', '*', ' ', ' '],
+  [' ', ' ', ' ', ' ', 'e']
 ];
 
 //Iterative function
 const maze = function(array, x=0, y=0){
   let maxX = array[0].length;
   let maxY = array.length;
+  console.log(array);
   //Base Case
-  if (array[y][x] === 'e'){
-    return mazePath;
-  }
+  
   //test directions - all valid directions
+  if (array[y][x] === 'e'){
+    return '';
+  } 
+  
   if(validPath(array, right(x), y, maxX, maxY) === true){
     x = right(x);
-    mazePath = mazePath + 'R';
-    return mazePath;
-  } else if (validPath(array, left(x), y, maxX, maxY) === true) {
-    x = left(x);
-    mazePath = mazePath + 'L';
-    return mazePath;
-  } else if (validPath(array, x, up(y), maxX, maxY) === true) {
-    y = up(y);
-    mazePath = mazePath + 'U';
-    return mazePath;
+    mazePath = 'R';
+    array[y][x-1] = '*';
+    return mazePath + maze(array,x,y);
   } else if (validPath(array, x, down(y), maxX, maxY) === true) {
     y = down(y);
-    mazePath = mazePath + 'D';
-    return mazePath;
-  }
-  console.log('Location: ', x + y);  
-  
-  return mazePath + maze(array,x,y,maxX,maxY);
+    mazePath = 'D';
+    array[y-1][x] = '*';
+    return mazePath + maze(array,x,y);
+  } else if (validPath(array, left(x), y, maxX, maxY) === true) {
+    x = left(x);
+    mazePath = 'L';
+    array[y][x+1] = '*';
+    return mazePath + maze(array,x,y);
+  } else if (validPath(array, x, up(y), maxX, maxY) === true) {
+    y = up(y);
+    mazePath = 'U';
+    array[y+1][x] = '*';    
+    return mazePath + maze(array,x,y);
+  } 
 };
-console.log(maze(testMaze));
+
+console.log('Maze: ', maze(testMaze));
 
 
 
@@ -174,4 +186,4 @@ const binary = function(n){
   return binary(Math.floor(n/2)) + binNum;
 };
 
-console.log('Binary: ', binary(0));
+console.log('Binary: ', binary(7));
