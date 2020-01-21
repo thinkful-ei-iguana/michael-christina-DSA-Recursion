@@ -83,9 +83,70 @@ const factorial = function(n){
 console.log('Factorial: ', factorial(4));
 
 // 8 Find a way out of the maze
-const maze = function(array){
+let mazePath = '';
 
+const validPath = function(array, x, y, maxX, maxY){
+  if (x < 0 || x > maxX || y < 0 || y > maxY) {
+    return false;
+  } else if (array[x][y] === '*') {
+    return false;
+  } else return true;
 };
+
+const up = function(y){
+  return y-1;
+};
+const down = function(y){
+  return y+1;
+};
+const right = function(x){
+  return x+1;
+};
+const left = function(x){
+  return x-1;
+};
+
+const testMaze = [
+  [' ',' ', ' '],
+  [' ','*', ' '],
+  [' ',' ', 'e']
+];
+
+//Iterative function
+const maze = function(array, x=0, y=0){
+  let maxX = array[0].length;
+  let maxY = array.length;
+  //Base Case
+  if (array[y][x] === 'e'){
+    return mazePath;
+  }
+  //test directions - all valid directions
+  if(validPath(array, right(x), y, maxX, maxY) === true){
+    x = right(x);
+    mazePath = mazePath + 'R';
+    return mazePath;
+  } else if (validPath(array, left(x), y, maxX, maxY) === true) {
+    x = left(x);
+    mazePath = mazePath + 'L';
+    return mazePath;
+  } else if (validPath(array, x, up(y), maxX, maxY) === true) {
+    y = up(y);
+    mazePath = mazePath + 'U';
+    return mazePath;
+  } else if (validPath(array, x, down(y), maxX, maxY) === true) {
+    y = down(y);
+    mazePath = mazePath + 'D';
+    return mazePath;
+  }
+  console.log('Location: ', x + y);  
+  
+  return mazePath + maze(array,x,y,maxX,maxY);
+};
+console.log(maze(testMaze));
+
+
+
+
 
 // 9 Find ALL the ways out of the maze
 const allMaze = function(array){
@@ -113,4 +174,4 @@ const binary = function(n){
   return binary(Math.floor(n/2)) + binNum;
 };
 
-console.log('Binary: ', binary(9));
+console.log('Binary: ', binary(0));
