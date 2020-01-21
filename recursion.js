@@ -69,7 +69,7 @@ const fibonacci = function(n, seed=0){
   }
   return seed[n] = fibonacci(n-1, seed) + fibonacci(n-2, seed);
 };
-console.log('Fibonacci: ', fibonacci(35));
+console.log('Fibonacci: ', fibonacci(7));
 
 // 7 Factorial
 const factorial = function(n){
@@ -83,18 +83,34 @@ const factorial = function(n){
 console.log('Factorial: ', factorial(4));
 
 // 8 Find a way out of the maze
-const maze = function(array);
+const maze = function(array){
+
+};
+
 // 9 Find ALL the ways out of the maze
+const allMaze = function(array){
+
+};
 
 // 10 Anagrams
-  //length of word factorial is number of solutions.
-  
+//length of word factorial is number of solutions.
+const anagrams = function(word){
+
+};
+
 // 11 Organization Chart
+const organization = function(){
+
+};
 
 // 12 Binary Representation
 const binary = function(n){
+  let binNum;
   //Base case
-  // if()
+  if(n <= 0)
+    return '';
+  binNum = n % 2;
+  return binary(Math.floor(n/2)) + binNum;
 };
 
-console.log('Binary: ', binary(25346));
+console.log('Binary: ', binary(9));
