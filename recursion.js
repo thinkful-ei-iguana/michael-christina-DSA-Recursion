@@ -85,96 +85,184 @@ const factorial = function(n){
 console.log('Factorial: ', factorial(4));
 
 // 8 Find a way out of the maze
-let mazePath = '';
+let path = [];
 
-const validPath = function(array, x, y, maxX, maxY){
-  if (x < 0 || x > maxX-1 || y < 0 || y > maxY-1) {
-    return false;
-  } else if (array[y][x] === '*') {
-    return false;
-  } else return true;
-};
-
-const up = function(y){
-  y = y-1;
-  return y;
-};
-const down = function(y){
-  y = y+1;
-  return y;
-};
-const right = function(x){
-  x = x+1;
-  return x;
-};
-const left = function(x){
-  x = x-1;
-  return x;
-};
 
 const testMaze = [
-  [' ', ' ', '*', '*', ' '],
-  [' ', '*', '*', '*', ' '],
-  [' ', ' ', '*', ' ', ' '],
-  [' ', ' ', ' ', ' ', 'e']
+  [' ', ' ', ' ', '*', ' ', ' ', ' '],
+  ['*', '*', ' ', '*', ' ', '*', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', '*', '*', '*', '*', '*', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', 'e']
 ];
 
 //Iterative function
-const maze = function(array, x=0, y=0){
-  let maxX = array[0].length;
-  let maxY = array.length;
-  console.log(array);
+const maze = function(array, position=0,row, col, direction='S', path) {
+  if (col < 0 || row < 0) {
+    return;
+  }
+  if (col >= array[0].length || row >= array.length) {
+    return;
+  }
+
+  path[position] = direction;
+  position++;
+
   //Base Case
-  
-  //test directions - all valid directions
-  if (array[y][x] === 'e'){
-    return '';
-  } 
-  
-  if(validPath(array, right(x), y, maxX, maxY) === true){
-    x = right(x);
-    mazePath = 'R';
-    array[y][x-1] = '*';
-    return mazePath + maze(array,x,y);
-  } else if (validPath(array, x, down(y), maxX, maxY) === true) {
-    y = down(y);
-    mazePath = 'D';
-    array[y-1][x] = '*';
-    return mazePath + maze(array,x,y);
-  } else if (validPath(array, left(x), y, maxX, maxY) === true) {
-    x = left(x);
-    mazePath = 'L';
-    array[y][x+1] = '*';
-    return mazePath + maze(array,x,y);
-  } else if (validPath(array, x, up(y), maxX, maxY) === true) {
-    y = up(y);
-    mazePath = 'U';
-    array[y+1][x] = '*';    
-    return mazePath + maze(array,x,y);
-  } 
+  if (array[row][col] === 'e') {
+    PrintPath(path, 1, position -1);
+    return;
+  }
+  if (array[row][col] === ' ') {
+    array[row][col] = 'X';
+
+    maze(array, position, row, col -1, 'L', path);
+    maze(array, position, row-1, col, 'U', path);
+    maze(array, position, row, col+1, 'R', path);
+    maze(array, position, row+1, col, 'D', path);
+  }
+  position--;
 };
 
-console.log('Maze: ', maze(testMaze));
+const PrintPath = function(path, startPos, endPos) {
+  console.log('Found path to the exit: ');
+  console.log(path);
+};
+
+// maze(testMaze,0,0,0,'S',[]);
 
 
 
 
 
 // 9 Find ALL the ways out of the maze
-const allMaze = function(array){
+const allMaze = function(array, position=0, row=0, col=0, direction='S', path=[]){
+  if(col < 0 || row < 0) {
+    return;
+  }
+  if(col >= array[0].length || row >= array.length) {
+    return;
+  }
 
+  path[position] = direction;
+  position++;
+
+  if(array[row][col] === 'e') {
+    PrintPath(path, 1, position -1);
+    return;
+  }
+  
+  if(array[row][col] === ' ') {
+    array[row][col] = 'X';
+    allMaze(array, position, row, col - 1, 'L', path);
+    allMaze(array, position, row - 1, col, 'U', path);
+    allMaze(array, position, row, col + 1, 'R', path);
+    allMaze(array, position, row + 1, col, 'D', path);
+    array[row][col] = ' ';
+  }
+  position--;
 };
+
+allMaze(testMaze,0,0,0,'S',[]);
 
 // 10 Anagrams
 //length of word factorial is number of solutions.
-const anagrams = function(word){
-
+const anagrams = function(pre, word){
+  //Base Case
+  if(word.length <=1) {
+    return console.log(`The anagram is ${pre}${word}`);
+  } else {
+    for(let i=0; i<word.length; i++) {
+      let letter = word.substring(i, i+1);
+      let prevLet = word.substring(0,i);
+      let postLet = word.substring(i+1);
+      anagrams(pre+letter, prevLet+postLet);
+    }
+  }
 };
+
+function printAnagrams(word){
+  anagrams(' ', word);
+}
+
+printAnagrams('word');
+
 
 // 11 Organization Chart
-const organization = function(){
+let orgData = {
+  'Zuckerberg': {		
+    'Schroepfer': {
+      'Bosworth': {
+        'Steve':{},
+        'Kyle':{},
+        'Andra':{}
+      },
+      'Zhao': {
+        'Richie':{},
+        'Sofia':{},
+        'Jen':{}
+      },
+      'Badros': {
+        'John':{},
+        'Mike':{},
+        'Pat':{}
+      },
+      'Parikh': {
+        'Zach':{},
+        'Ryan':{},
+        'Tes':{}
+      }
+    },
+    'Schrage': {
+      'VanDyck': {
+        'Sabrina':{},
+        'Michelle':{},
+        'Josh':{}
+      },
+      'Swain': {
+        'Blanch':{},
+        'Tom':{},
+        'Joe':{}
+      },
+      'Frankovsky': {
+        'Jasee':{},
+        'Brian':{},
+        'Margaret':{}
+      }
+    },
+    'Sandberg': {
+      'Goler': {
+        'Eddie':{},
+        'Julie':{},
+        'Annie':{}
+      },
+      'Hernandez': {
+        'Rowi':{},
+        'Inga':{},
+        'Morgan':{}
+      },
+      'Moissinac': {
+        'Amy':{},
+        'Chuck':{},
+        'Vinni':{}
+      },
+      'Kelley': {
+        'Eric':{},
+        'Ana':{},
+        'Wes':{}
+      }
+    }}};
 
+const organization = function(obj, depth = 0){
+  // pre-order BFT
+  let tab = ' '.repeat(depth * 4);
+  Object.keys(obj).forEach(key => {
+    console.log(tab + key);
+    organization(obj[key], depth + 1);
+  });
 };
+
+organization(orgData);
 
 // 12 Binary Representation
 const binary = function(n){
@@ -182,7 +270,7 @@ const binary = function(n){
   //Base case
   if(n <= 0)
     return '';
-  binNum = n % 2;
+  binNum = Math.floor(n % 2);
   return binary(Math.floor(n/2)) + binNum;
 };
 
